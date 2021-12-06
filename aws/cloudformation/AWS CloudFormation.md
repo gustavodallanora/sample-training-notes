@@ -1,0 +1,18 @@
+# CloudFormation
+
+Simple Ec2 Example
+
+``` bash
+Resources:
+  Ec2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-467ca739 # Amazon Linux AMI in N.Virginia
+      Tags:
+        - Key: Name
+          Value: A simple example
+```
+
+
+
