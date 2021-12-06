@@ -70,6 +70,8 @@ Abra o aplicativo instalado anteriormente e clique para mostar o QR Code.
 
 Ao ler o QR code ```(1)```  com o aplicativo, o aplicativo começará a exibir os códigos que são renovados a cada poucos segundos.
 
+![image](./mfa-setup-media/qr-code-steps.png)
+
 Digite dois destes códigos consectivos nos campos indicados ```(2)``` e ```(3)```.
 
 :warning: *Para estes campos, é necessário que sejam códigos que aparecem em sequência, no caso de digitar o primeiro e ‘perder’ o segundo, comece o processo do início novamente.*
