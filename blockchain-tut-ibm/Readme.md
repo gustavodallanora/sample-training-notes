@@ -132,9 +132,9 @@ Com o Docker em execução, vá na barra lateral da extensão, e ao painel ```Fa
 
 ![image](./media/packaged-smart-contract.png)
 
-Aguarde alguns instantes, você pode acompanhar o progresso na aba ```Ouput``` do VS Code, o tempo pode variar conforme o desempenho do computador e a velocidade da internet, uma vez que a imagem do conteiner é obtida on line.
+Aguarde alguns instantes, você pode acompanhar o progresso na aba ```Output``` do VS Code, o tempo pode variar conforme o desempenho do computador e a velocidade da internet, uma vez que a imagem do conteiner é obtida on line.
 
-Concluída a operação, você verá na aba ```Ouput``` do VS Code um log similar a:
+Concluída a operação, você verá na aba ```Output``` do VS Code um log similar a:
 ```bash
 [INFO] f230bddb739c: Pull complete
 [INFO] e8c6b504d6e3: Pull complete
@@ -155,9 +155,164 @@ Agora, na barra lateral da extensão, dentro do painel ```Fabric Environments```
 
 ![image](./media/deploy-smart-contract.png)
 
-No passo 1, selecione o pacote que criamos ``` ```, clique em ```Next``` e depois clique em ```Deploy```.
+No passo 1, selecione o pacote que criamos ```bilhete-smart-contract@0.0.1```, clique em ```Next``` e depois clique em ```Deploy```.
 
 ![image](./media/do-deploy.png)
+
+Observe o progresso na aba ```Output``` conforme a operação é executada, procure por mensagens como as seguintes:
+
+```bash
+INFO 07e Successfully endorsed commit for chaincode name 'bilhete-smart-contract' on channel 'mychannel' with definition {sequence: 1, endorsement info: (version: '0.0.1', plugin: 'escc', init required: false), validation info: (plugin: 'vscc', policy: '12202f4368616e6e656c2f4170706c69636174696f6e2f456e646f7273656d656e74'), collections: (<nil>)}
+INFO 084 Chaincode with package ID 'bilhete-smart-contract_0.0.1:fc109e87189402aa883ec594f2185317e85e361352d87e58a01db64cd5f27ee5' now available on channel mychannel for chaincode definition bilhete-smart-contract:0.0.1
+bilhete-smart-contract@0.0.1 start
+Creating new Contract   command=run
+Creating new Contract "org.hyperledger.fabric"  command=run
+Registering with peer 172.17.0.2:2005 as chaincode "bilhete-smart-contract_0.01:f1db64cd5f27ee5"   command=run
+Successfully registered with peer node. State transferred to "established"   command=run
+```
+
+Depois de concluído o deployment, o Smart Contract e suas operações ficam disponíveis no painel ```Fabric Gateways``` em ```Channels``` -> ```mychannel``` -> ```bilhete-smart-contract@0.0.1```.
+
+![image](./media/contract-ops.png)
+
+### Invocando operações do Smart Contract
+
+As principais operações sobre o ativo já são criadas por padrão, são elas:
+* Criação: ```createBilhete```
+* Atualização: ```updateBilhete```
+* Consulta: ```readBilhete```
+* Exclusão: ```deleteBilhete```
+* Verificar Existência: ```bilheteExists```
+
+### Criação de um ativo
+
+Primeiramente, vamos criar um novo bilhete. Considere que o identificador do ativo é o número do bilhete e o valor indicará o beneficiário do bilhete. Sendo que o valor ```___VAZIO___``` significa que o bilhete está  disponível.
+
+Para isso, vá até a operação ```createBilhete``` no painel ```Fabric Gateways``` e dê um duplo click.
+
+Nos argumentos da transação, insira o seguinte JSON:
+```json
+{
+  "id": "bilhete_1",
+  "value": "___VAZIO___"
+}
+```
+
+Observe que o id é formado pelo nome do ativo, mais um identificador. Isso irá garantir que os ids armazenados sejam únicos.
+
+![image](./media/create-asset.png)
+
+Verifique as entradas e clique em ```Submit transaction```.
+
+Observe o progresso na aba ```Output``` conforme a operação é executada, procure por mensagens como as seguintes:
+
+```bash
+[INFO] submitTransaction
+[INFO] submitting transaction createBilhete with args bilhete_1,___VAZIO___ on channel mychannel to peers org1peer-api.127-0-0-1.nip.io:8080
+[SUCCESS] No value returned from createBilhete
+```
+
+Exercitar o comportamento, clique novamente em ```Submit transaction``` sem mudar o payload, desta vez aparecerá a mensagem ```The bilhete bilhete_1 already exists``` indicando que já existe o ativo. Na aba ```Output```:
+
+```bash
+[INFO] submitTransaction
+[INFO] submitting transaction createBilhete with args bilhete_1,___VAZIO___ on channel mychannel to peers org1peer-api.127-0-0-1.nip.io:8080
+[ERROR] Error submitting transaction: No valid responses from any peers. Errors:
+    peer=org1peer-api.127-0-0-1.nip.io:8080, status=500, message=error in simulation: transaction returned with failure: Error: The bilhete bilhete_1 already exists
+```
+
+
+### Consulta de um ativo
+
+Normalmente, a consulta do ativo pode ser feita pela operação ```readBilhete```, para isso, basta informar os seguintes argumentos da transação:
+
+```json
+{
+  "id": "bilhete_1"
+}
+```
+
+Ao submeter a transação será retornado o valor do ativo:
+
+![image](./media/read-bilhete.png)
+
+Aqui no tutorial, iremos um pouco além. Inspecionaremos direto na base de dados o que está gravado. A base dados usada pela extensão da IBM é a [CouchDB](https://couchdb.apache.org/).
+
+Para acessá-la, clique no ícone ```...``` do painel ```Fabric Environments``` e então na opção ```Open CouchDB in browser```.
+
+![image](./media/db-open-browser.png)
+
+Isso abrirá um navegador com o endereço na sua própria máquina: http://couchdb.127-0-0-1.nip.io:8080/_utils/#login
+
+Insira o username ```admin``` e a senha ```adminpw```.
+
+![image](./media/db-login.png)
+
+Feito o login, localize e clique na base referente ao Smart Contract do nosso ativo ```bilhete``` que é chamada ```org1_mychannel_bilhete-smart-contract```.
+
+Observe que a base de dados já contém 1 documento, referente ao ativo que recém criamos:
+
+![image](./media/db-list.png)
+
+Clicando no nome da base de dados, a lista dos documentos é exibida:
+
+![image](./media/db-doc-list.png)
+
+Na parte superior da lista, clique na opção ```{} JSON``` para exibir os documentos completos.
+
+Você poderá ver no elemento ```value``` o valor do ativo, que no nosso cenário, indica que o bilhete ainda não pertence à alguém.
+
+![image](./media/db-doc-open-1.png)
+
+
+### Alterando um ativo
+
+Agora vamos supor que o nosso bilhete foi emitido e possui um beneficiário. 
+
+Usando a operação ```updateBilhete``` iremos atualizar o documento do ativo, alterando seu valor na base de dados.
+
+Faremos isso com o seguinte payload na transação:
+
+```json
+{
+  "id": "bilhete_1",
+  "value": "GRAAC"
+}
+```
+
+No formulário de criação de transações a alteração fica assim:
+
+![image](./media/bilhete-update-1.png)
+
+Novamente, acompanhe o resultado da transação na aba ```Output``` conforme a operação é executada, procure por mensagens como as seguintes:
+
+```bash
+[INFO] submitTransaction
+[INFO] submitting transaction updateBilhete with args bilhete_1,GRAAC on channel mychannel to peers org1peer-api.127-0-0-1.nip.io:8080
+[SUCCESS] No value returned from updateBilhete
+```
+
+Com isso, agora se olharmos na base de dados, veremos que o valor foi alterado.
+
+![image](./media/db-doc-updated.png)
+
+---
+## Conclusão
+
+Pronto!!! Você concluiu o tutorial!! :partying_face:
+
+Agora você já viu como preparar o seu ambiente e fazer algumas operações básicas com Smart Contracts.
+
+Aproveite para dar mais uma explorada nos componentes instalados, nas operações e também no código fonte que foi gerado nas pastas do projeto no VS Code.
+
+Depois, dê continuidade nos estudos fazendo os tutoriais que são apresentados dentro da página de tutoriais da extensão instalada.
+
+### Para reflexão
+
+Aproveitando que está por aqui, deixamos algumas perguntas para você refletir:
+* Por que a versão do Smart Contract precisa ser controlada? 
+* Quais os impactos do Smart Contract estar em versões diferentes nos peers da rede?
+* Se a blockchain é imutável, como conseguimos alterar o valor no ativo que criamos?
 
 ---
 ## Referências
