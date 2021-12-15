@@ -7,7 +7,7 @@ O foco do tutorial é a plataforma Windows, a IDE VS Code e a linguagem Javascri
 
 Para aprofundar no tema, faça também os tutoriais que disponibilizados direto no VS Code pela extensão que instalaremos.
 
-*Conteúdo Estes passos são baseados nesta documentação da [extensão de desenvolvimento Blockchain da IBM][1].*
+*Este conteúdo e passos são baseados nesta documentação da [extensão de desenvolvimento Blockchain da IBM][1].*
 
 ---
 ## Pré-requisitos
