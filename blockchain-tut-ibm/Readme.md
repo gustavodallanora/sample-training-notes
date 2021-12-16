@@ -21,18 +21,19 @@ Antes de começar, certifique-se de possuir instalado:
 1. Node 12.15.0 ou superior e npm v6.x ou superior. [Download](https://nodejs.org/en/download/)
 1. Build Tools para C++ [Docs](https://github.com/felixrieseberg/windows-build-tools#windows-build-tools)
     * Rodar no powershell como administrador: ```npm install --global windows-build-tools```
+    * Este passo deve instalar o Python27 em sua máquina, caso isso não ocorra, instale manualmente. [Download](https://www.python.org/download/releases/2.7/)
 1. OpenSSL v1.0.2 ou superior [Oficial](https://www.openssl.org/community/binaries.html) ou Alternativa: [Usar openssl que vem com o git](https://git-scm.com/downloads)
 
 ### Configurações
 
 Colocar na variável de ambiente PATH os caminhos do Python e do OpenSSL, ex:
 ```
-PATH=%PATH%;C:\Program Files\Git\usr\bin;C:\Users\gustavo\.windows-build-tools\python27\
+PATH=%PATH%;C:\Program Files\Git\usr\bin;%USERPROFILE%\.windows-build-tools\python27\
 ```
 
 Configurar variável PYTHON com o local do executável, ex:
 ```
-PYTHON="C:\Users\gustavo\.windows-build-tools\python27\python.exe"
+PYTHON="%USERPROFILE%\.windows-build-tools\python27\python.exe"
 ```
 ---
 ## Instalar a extensão
