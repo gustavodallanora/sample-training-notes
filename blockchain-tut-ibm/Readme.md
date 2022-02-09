@@ -18,6 +18,8 @@ Antes de começar, certifique-se de possuir instalado:
 
 1. VS Code versão 1.40 ou superior. [Download](https://code.visualstudio.com/)
 1. Docker versão v17.06.2-ce ou superior. [Download](https://www.docker.com/get-started)
+    * Atenção: A partir de 31 janeiro de 2022 Docker Desktop pode ser utilizado sem custo apenas para uso educacional, projetos open source e pessoal. Consulte [aqui](https://docs.docker.com/desktop/faqs/#do-i-need-to-pay-to-use-docker-desktop) mais informações.
+    * Caso sua utilização não se encaixe no uso autorizado, remova o Docker Desktop da sua máquina ou providencie assinatura do plano apropriado.
 1. Node 12.15.0 ou superior e npm v6.x ou superior. [Download](https://nodejs.org/en/download/)
 1. Build Tools para C++ [Docs](https://github.com/felixrieseberg/windows-build-tools#windows-build-tools)
     * Rodar no powershell como administrador: ```npm install --global windows-build-tools```
